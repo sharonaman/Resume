@@ -5,16 +5,18 @@ services:
     build: .
     ports:
       - "8000:8000"
-    environment:
-      DATABASE_URL: postgres://resume:>tmsad8PBPe@db:5432/resume_db 
+    command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
-
+  
   db:
-    image: postgres:13.5-alpine
-    restart: always
-    env_file: .env
-    ports:
-      - "5434:5432"  # Mapping container port 5432 to host port 5434
+    hostname: resume_db
+    image: postgres:latest
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - resume_db:/var/lib/postgresql/data/
+    container_name: resume_db
+    env_file:
+      - .env
+
+volumes:
+  resume_db:
